@@ -20,7 +20,8 @@ jobs:
       - run: cargo fmt --all -- --check
       - run: cargo clippy --all-targets --locked -- -D warnings
       - run: cargo test --locked
-      - run: cargo package --locked
+      # Checksum-pinned vendor sources are generated and intentionally gitignored.
+      - run: cargo package --locked --allow-dirty
       - name: Native error under panic=abort
         run: cargo run --locked --example abort_smoke
         env:
