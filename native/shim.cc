@@ -114,14 +114,15 @@ extern "C" int oxj_start(oxj_encoder* e, uint32_t width, uint32_t height,
     e->cinfo.input_components = 3;
     e->cinfo.in_color_space = JCS_RGB;
     jpegli_set_defaults(&e->cinfo);
-    // Preserve oximg's force_baseline=false quality semantics.
-    jpegli_set_quality(&e->cinfo, quality, FALSE);
     e->cinfo.comp_info[0].h_samp_factor = sampling == 0 ? 1 : 2;
     e->cinfo.comp_info[0].v_samp_factor = sampling == 2 ? 2 : 1;
     for (int i = 1; i < 3; ++i) {
       e->cinfo.comp_info[i].h_samp_factor = 1;
       e->cinfo.comp_info[i].v_samp_factor = 1;
     }
+    // Quantization tables depend on sampling at the time quality is set.
+    // Preserve oximg's force_baseline=false quality semantics.
+    jpegli_set_quality(&e->cinfo, quality, FALSE);
     jpegli_set_progressive_level(&e->cinfo, scans == 0 ? 0 : 2);
     if (scans == 2) {
       e->cinfo.scan_info = oximg_scans;

@@ -35,14 +35,14 @@ reference = original.with_name("jpegli_reference.rs")
 text = reference.read_text()
 needle = 'ffi::jpegli_set_quality(&mut enc.cinfo, quality as c_int, 0);'
 assert text.count(needle) == 1
-text = text.replace(needle, needle + '''
+text = text.replace(needle, '''
             // Benchmark control: old core defaults to 4:4:4, new core defaults
             // to 4:2:0. Force the original sampling for fair wrapper isolation.
             for i in 0..3 {
                 (*enc.cinfo.comp_info.add(i)).h_samp_factor = 1;
                 (*enc.cinfo.comp_info.add(i)).v_samp_factor = 1;
             }
-''')
+''' + needle)
 reference.write_text(text)
 shutil.copyfile(root / "bench/adapter.rs", original)
 cargo = controlled / "Cargo.toml"

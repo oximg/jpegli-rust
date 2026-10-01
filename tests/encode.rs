@@ -16,6 +16,40 @@ fn decode(jpeg: &[u8]) -> image::RgbImage {
         .into_rgb8()
 }
 
+#[test]
+fn quantization_tables_follow_explicit_sampling() {
+    let src = pixels(17, 19);
+    let tables: Vec<Vec<Vec<u8>>> = [Subsampling::S444, Subsampling::S422, Subsampling::S420]
+        .into_iter()
+        .map(|subsampling| {
+            let jpeg = encode_rgb(
+                &src,
+                17,
+                19,
+                51,
+                Options {
+                    quality: 80,
+                    subsampling,
+                    ..Options::default()
+                },
+            )
+            .unwrap();
+            segments(&jpeg)
+                .into_iter()
+                .filter(|(m, _)| *m == 0xDB)
+                .map(|(_, data)| data.to_vec())
+                .collect()
+        })
+        .collect();
+    // The pinned core applies special quantization scaling only to 4:2:0.
+    // Setting quality before sampling incorrectly makes all three identical.
+    assert!(!tables[0].is_empty());
+    // Independently captured Q80 luma DQT from the pinned stock oximg encoder.
+    assert_eq!(&tables[0][0][..12], &[0, 4, 5, 5, 9, 6, 9, 9, 9, 9, 9, 11]);
+    assert_eq!(tables[0], tables[1]);
+    assert_ne!(tables[0], tables[2]);
+}
+
 // Walk JPEG markers, including entropy sections (stuffed bytes/restart markers).
 fn segments(jpeg: &[u8]) -> Vec<(u8, &[u8])> {
     assert_eq!(&jpeg[..2], &[255, 216]);
@@ -103,7 +137,7 @@ fn independent_decoder_accepts_all_modes_and_odd_dimensions() {
 
 #[test]
 fn padding_batch_size_and_encoder_moves_do_not_change_output() {
-    let (w, h) = (613, 471);
+    let (w, h) = (1227, 943);
     let src = pixels(w, h);
     let expected = encode_rgb(&src, w, h, w * 3, Options::default()).unwrap();
     assert!(expected.len() > 65536, "exercise destination growth");

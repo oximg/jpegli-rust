@@ -21,7 +21,7 @@ by this POC. The crates.io package includes the pinned native sources;
 
 ```toml
 [dependencies]
-jpegli-rust = "0.1"
+jpegli-rust = "0.1.1"
 ```
 
 ```sh

@@ -1,6 +1,6 @@
 [package]
 name = "jpegli-rust"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 rust-version = "1.90"
 description = "Rust API for Google's jpegli encoder with checked RGB rows and contained native errors"
