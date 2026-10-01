@@ -1,0 +1,10 @@
+jpegli-rust POC
+
+The eight-scan spectral progression in native/shim.cc is adapted from:
+https://github.com/oximg/oximg/blob/73a68e0d77b210e5468d0b385c0bfc2937c8e706/src/pipeline/jpegli_enc.rs
+Licensed under the Apache License, Version 2.0.
+
+Native dependencies and exact revisions are recorded in native/sources.json.
+Their original licenses and copyright notices are retained in downloaded
+native/vendor sources. They are not relicensed by this wrapper.
+

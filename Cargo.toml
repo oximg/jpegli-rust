@@ -1,0 +1,32 @@
+[package]
+name = "jpegli-rust"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.90"
+description = "Rust API for Google's jpegli encoder with checked RGB rows and contained native errors"
+license = "Apache-2.0"
+repository = "https://github.com/oximg/jpegli-rust"
+readme = "README.md"
+keywords = ["jpeg", "jpegli", "encoder", "image", "compression"]
+categories = ["multimedia::images"]
+links = "oximg_jpegli"
+include = [
+    "/src/**", "/build.rs", "/Cargo.toml", "/Cargo.lock", "/README.md", "/LICENSE", "/NOTICE",
+    "/native/**", "!/native/downloads/**",
+    "!/native/vendor/third_party/skcms/profiles/**",
+    "!/native/vendor/third_party/highway/g3doc/**",
+    "!/native/vendor/third_party/libjpeg-turbo/testimages/**",
+    "/examples/**", "/tests/**", "/scripts/**", "/docs/**", "/bench/**"
+]
+
+[dev-dependencies]
+image = { version = "0.25", default-features = false, features = ["jpeg", "png"] }
+
+[profile.release]
+lto = "thin"
+
+[lints.rust]
+unsafe_op_in_unsafe_fn = "deny"
+
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]

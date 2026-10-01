@@ -1,0 +1,23 @@
+cmake_minimum_required(VERSION 3.16)
+project(oximg_jpegli LANGUAGES C CXX)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
+foreach(feature TOOLS DEVTOOLS BENCHMARK FUZZERS JPEGLI_LIBJPEG DOXYGEN MANPAGES JNI SJPEG OPENEXR TCMALLOC)
+  set(JPEGLI_ENABLE_${feature} OFF CACHE BOOL "" FORCE)
+endforeach()
+# Upstream configures a CMS even when only building jpegli-static.
+set(JPEGLI_ENABLE_SKCMS ON CACHE BOOL "" FORCE)
+add_subdirectory(vendor upstream EXCLUDE_FROM_ALL)
+# Error callbacks throw only inside C++. Upstream defaults to -fno-exceptions;
+# enable cleanup tables so callbacks never longjmp over live std::vectors.
+target_compile_options(jpegli-static PRIVATE -fexceptions)
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  target_compile_options(jpegli-static PRIVATE -fcxx-exceptions)
+endif()
+add_library(oximg_jpegli_shim STATIC shim.cc)
+target_include_directories(oximg_jpegli_shim PRIVATE vendor)
+target_link_libraries(oximg_jpegli_shim PRIVATE jpegli-static)
+target_compile_options(oximg_jpegli_shim PRIVATE -Wall -Wextra -Werror)
+install(TARGETS oximg_jpegli_shim jpegli-static hwy ARCHIVE DESTINATION lib)

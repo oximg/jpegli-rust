@@ -1,0 +1,15 @@
+{
+  "command": [
+    "target/release/examples/bench",
+    "--synthetic",
+    "30"
+  ],
+  "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "stderr": "jpegli 031a0077f5799a6041004267fc12b956c1f52a20, 1024x768, 30 iterations; input decode excluded",
+  "csv": "mode,quality,subsampling,bytes,p50_ms,p95_ms,mpix_per_s\nSequential,85,444,414255, 6.111,6.324,128.688\nJpegliDefault,85,444,336186, 20.076,20.333,39.172\nOximg,85,444,332808, 10.624,10.990,74.024\n",
+  "peak_rss_bytes": 19775488,
+  "user_cpu_seconds": 1.198877,
+  "system_cpu_seconds": 0.022047999999999998,
+  "memory_scope": "entire child process: input plus all scan modes, not codec-only or per-mode"
+}

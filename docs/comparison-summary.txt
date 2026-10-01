@@ -1,0 +1,258 @@
+| Workload | Cases | POC / stock time | POC / same-core time | POC / stock peak RSS | POC / same-core peak RSS |
+|---|---:|---:|---:|---:|---:|
+| 4K encode | 1 | 1.188x | 0.994x | 1.114x | 1.004x |
+| 4K rows | 1 | 1.213x | 1.003x | 1.160x | 1.011x |
+| RGB encode | 18 | 1.023x | 0.992x | 0.937x | 0.915x |
+| RGB rows | 18 | 1.028x | 1.003x | 0.972x | 0.941x |
+| pipeline 128 | 12 | 1.004x | 0.996x | 1.013x | 0.996x |
+| pipeline 512 | 12 | 1.011x | 1.002x | 1.004x | 1.011x |
+
+Per-case results (pooled samples; p95 is in-process latency, not HTTP latency):
+kodim01-128x85:encode
+  stock: p50=0.1544ms p95=0.1743ms bytes=3631 rss=2.64MiB
+  reference: p50=0.1567ms p95=0.1694ms bytes=3804 rss=2.64MiB
+  poc: p50=0.1525ms p95=0.1665ms bytes=3804 rss=2.62MiB
+kodim01-128x85:rows
+  stock: p50=0.1561ms p95=0.1712ms bytes=3631 rss=2.59MiB
+  reference: p50=0.1546ms p95=0.1660ms bytes=3804 rss=2.62MiB
+  poc: p50=0.1576ms p95=0.1712ms bytes=3804 rss=2.62MiB
+kodim01-512x341:encode
+  stock: p50=1.9153ms p95=2.0245ms bytes=46858 rss=4.61MiB
+  reference: p50=1.9250ms p95=2.0067ms bytes=45558 rss=4.69MiB
+  poc: p50=1.9270ms p95=2.0192ms bytes=45558 rss=4.72MiB
+kodim01-512x341:rows
+  stock: p50=1.9225ms p95=2.0971ms bytes=46858 rss=5.94MiB
+  reference: p50=1.9242ms p95=2.0575ms bytes=45558 rss=6.30MiB
+  poc: p50=1.9496ms p95=2.0654ms bytes=45558 rss=4.73MiB
+kodim01-768x512:encode
+  stock: p50=4.1958ms p95=4.3851ms bytes=99077 rss=13.11MiB
+  reference: p50=4.2590ms p95=4.4398ms bytes=95002 rss=14.56MiB
+  poc: p50=4.1899ms p95=4.3524ms bytes=95002 rss=7.23MiB
+kodim01-768x512:rows
+  stock: p50=4.2267ms p95=4.5623ms bytes=99077 rss=10.19MiB
+  reference: p50=4.2661ms p95=4.4647ms bytes=95002 rss=14.52MiB
+  poc: p50=4.2541ms p95=4.4494ms bytes=95002 rss=10.59MiB
+kodim01:pipeline:128:p1
+  stock: p50=1.7226ms p95=1.7911ms bytes=3682 rss=4.02MiB
+  reference: p50=1.7300ms p95=1.8417ms bytes=3915 rss=3.91MiB
+  poc: p50=1.7207ms p95=1.7792ms bytes=3915 rss=3.98MiB
+kodim01:pipeline:128:p2
+  stock: p50=2.7865ms p95=2.9080ms bytes=3672 rss=7.00MiB
+  reference: p50=2.8097ms p95=2.9158ms bytes=3912 rss=6.89MiB
+  poc: p50=2.8220ms p95=2.9430ms bytes=3912 rss=6.91MiB
+kodim01:pipeline:512:p1
+  stock: p50=3.4073ms p95=3.6078ms bytes=47926 rss=5.75MiB
+  reference: p50=3.4199ms p95=3.5854ms bytes=46756 rss=5.84MiB
+  poc: p50=3.4410ms p95=3.5661ms bytes=46756 rss=5.91MiB
+kodim01:pipeline:512:p2
+  stock: p50=5.3626ms p95=5.5462ms bytes=47901 rss=11.20MiB
+  reference: p50=5.3054ms p95=5.5077ms bytes=46716 rss=11.22MiB
+  poc: p50=5.3265ms p95=5.5885ms bytes=46716 rss=11.20MiB
+kodim03-128x85:encode
+  stock: p50=0.1421ms p95=0.1555ms bytes=3133 rss=2.56MiB
+  reference: p50=0.1469ms p95=0.1589ms bytes=3572 rss=2.62MiB
+  poc: p50=0.1518ms p95=0.1748ms bytes=3572 rss=2.62MiB
+kodim03-128x85:rows
+  stock: p50=0.1432ms p95=0.1653ms bytes=3133 rss=2.59MiB
+  reference: p50=0.1480ms p95=0.1640ms bytes=3572 rss=2.64MiB
+  poc: p50=0.1546ms p95=0.1651ms bytes=3572 rss=2.62MiB
+kodim03-512x341:encode
+  stock: p50=1.7140ms p95=1.8137ms bytes=25064 rss=4.44MiB
+  reference: p50=1.7496ms p95=1.8420ms bytes=26657 rss=6.11MiB
+  poc: p50=1.7535ms p95=1.8292ms bytes=26657 rss=4.47MiB
+kodim03-512x341:rows
+  stock: p50=1.7361ms p95=1.8452ms bytes=25064 rss=4.62MiB
+  reference: p50=1.7671ms p95=1.8734ms bytes=26657 rss=6.06MiB
+  poc: p50=1.7578ms p95=1.8770ms bytes=26657 rss=5.98MiB
+kodim03-768x512:encode
+  stock: p50=3.7336ms p95=3.9079ms bytes=47494 rss=6.52MiB
+  reference: p50=3.7988ms p95=4.0712ms bytes=49610 rss=9.64MiB
+  poc: p50=3.8305ms p95=3.9994ms bytes=49610 rss=9.67MiB
+kodim03-768x512:rows
+  stock: p50=3.7375ms p95=3.9073ms bytes=47494 rss=9.61MiB
+  reference: p50=3.7848ms p95=3.9473ms bytes=49610 rss=9.64MiB
+  poc: p50=3.7911ms p95=3.9582ms bytes=49610 rss=6.64MiB
+kodim03:pipeline:128:p1
+  stock: p50=1.3052ms p95=1.3558ms bytes=3185 rss=3.84MiB
+  reference: p50=1.3217ms p95=1.3707ms bytes=3640 rss=3.86MiB
+  poc: p50=1.3121ms p95=1.3511ms bytes=3640 rss=4.00MiB
+kodim03:pipeline:128:p2
+  stock: p50=2.3875ms p95=2.4790ms bytes=3187 rss=6.73MiB
+  reference: p50=2.4252ms p95=2.5275ms bytes=3631 rss=6.84MiB
+  poc: p50=2.3848ms p95=2.4935ms bytes=3631 rss=6.77MiB
+kodim03:pipeline:512:p1
+  stock: p50=3.1798ms p95=3.2533ms bytes=25283 rss=5.59MiB
+  reference: p50=3.2135ms p95=3.3107ms bytes=27083 rss=5.33MiB
+  poc: p50=3.1975ms p95=3.3207ms bytes=27083 rss=5.55MiB
+kodim03:pipeline:512:p2
+  stock: p50=4.7184ms p95=4.9257ms bytes=25251 rss=10.11MiB
+  reference: p50=4.7362ms p95=4.8596ms bytes=27088 rss=10.27MiB
+  poc: p50=4.7912ms p95=4.9520ms bytes=27088 rss=9.39MiB
+kodim05-128x85:encode
+  stock: p50=0.1665ms p95=0.1843ms bytes=4978 rss=2.64MiB
+  reference: p50=0.1819ms p95=0.1971ms bytes=5737 rss=2.75MiB
+  poc: p50=0.1785ms p95=0.1990ms bytes=5737 rss=2.67MiB
+kodim05-128x85:rows
+  stock: p50=0.1642ms p95=0.1782ms bytes=4978 rss=2.67MiB
+  reference: p50=0.1832ms p95=0.1965ms bytes=5737 rss=2.73MiB
+  poc: p50=0.1828ms p95=0.1970ms bytes=5737 rss=2.67MiB
+kodim05-512x341:encode
+  stock: p50=1.9794ms p95=2.0993ms bytes=56502 rss=6.44MiB
+  reference: p50=2.0365ms p95=2.1620ms bytes=59714 rss=6.58MiB
+  poc: p50=2.0165ms p95=2.1151ms bytes=59714 rss=4.78MiB
+kodim05-512x341:rows
+  stock: p50=1.9665ms p95=2.0643ms bytes=56502 rss=4.67MiB
+  reference: p50=2.0312ms p95=2.1474ms bytes=59714 rss=6.56MiB
+  poc: p50=2.0136ms p95=2.1173ms bytes=59714 rss=4.80MiB
+kodim05-768x512:encode
+  stock: p50=4.2190ms p95=4.4132ms bytes=107886 rss=14.16MiB
+  reference: p50=4.3543ms p95=4.5483ms bytes=112586 rss=13.91MiB
+  poc: p50=4.3510ms p95=4.6141ms bytes=112586 rss=11.42MiB
+kodim05-768x512:rows
+  stock: p50=4.2670ms p95=4.4568ms bytes=107886 rss=14.02MiB
+  reference: p50=4.3745ms p95=4.5849ms bytes=112586 rss=13.98MiB
+  poc: p50=4.3159ms p95=4.5639ms bytes=112586 rss=10.81MiB
+kodim05:pipeline:128:p1
+  stock: p50=1.8491ms p95=1.8971ms bytes=5238 rss=3.97MiB
+  reference: p50=1.8736ms p95=1.9260ms bytes=6052 rss=3.95MiB
+  poc: p50=1.8681ms p95=1.9821ms bytes=6052 rss=3.95MiB
+kodim05:pipeline:128:p2
+  stock: p50=2.9426ms p95=3.0433ms bytes=5210 rss=6.86MiB
+  reference: p50=2.9690ms p95=3.0829ms bytes=6025 rss=7.22MiB
+  poc: p50=2.9579ms p95=3.0808ms bytes=6025 rss=7.12MiB
+kodim05:pipeline:512:p1
+  stock: p50=3.4433ms p95=3.5379ms bytes=58338 rss=5.92MiB
+  reference: p50=3.5494ms p95=3.6448ms bytes=61516 rss=6.02MiB
+  poc: p50=3.5353ms p95=3.6269ms bytes=61516 rss=6.11MiB
+kodim05:pipeline:512:p2
+  stock: p50=5.5097ms p95=5.6636ms bytes=58172 rss=10.33MiB
+  reference: p50=5.6069ms p95=5.7697ms bytes=61387 rss=11.30MiB
+  poc: p50=5.5952ms p95=5.8498ms bytes=61387 rss=11.30MiB
+kodim08-128x85:encode
+  stock: p50=0.1605ms p95=0.1796ms bytes=4661 rss=2.64MiB
+  reference: p50=0.1740ms p95=0.1872ms bytes=5151 rss=2.67MiB
+  poc: p50=0.1714ms p95=0.1913ms bytes=5151 rss=2.72MiB
+kodim08-128x85:rows
+  stock: p50=0.1529ms p95=0.1680ms bytes=4661 rss=2.59MiB
+  reference: p50=0.1733ms p95=0.1857ms bytes=5151 rss=2.67MiB
+  poc: p50=0.1681ms p95=0.1832ms bytes=5151 rss=2.67MiB
+kodim08-512x341:encode
+  stock: p50=1.9449ms p95=2.0675ms bytes=52846 rss=4.66MiB
+  reference: p50=1.9727ms p95=2.0653ms bytes=54538 rss=4.73MiB
+  poc: p50=1.9729ms p95=2.0823ms bytes=54538 rss=5.08MiB
+kodim08-512x341:rows
+  stock: p50=1.9464ms p95=2.0790ms bytes=52846 rss=6.41MiB
+  reference: p50=1.9857ms p95=2.1089ms bytes=54538 rss=4.73MiB
+  poc: p50=2.0059ms p95=2.0987ms bytes=54538 rss=4.70MiB
+kodim08-768x512:encode
+  stock: p50=4.2430ms p95=4.4445ms bytes=108424 rss=13.45MiB
+  reference: p50=4.3734ms p95=4.5611ms bytes=109464 rss=14.08MiB
+  poc: p50=4.2801ms p95=4.4603ms bytes=109464 rss=11.33MiB
+kodim08-768x512:rows
+  stock: p50=4.2291ms p95=4.4036ms bytes=108424 rss=14.06MiB
+  reference: p50=4.2767ms p95=4.4441ms bytes=109464 rss=10.05MiB
+  poc: p50=4.3247ms p95=4.4896ms bytes=109464 rss=11.25MiB
+kodim08:pipeline:128:p1
+  stock: p50=1.8200ms p95=1.8925ms bytes=4808 rss=3.88MiB
+  reference: p50=1.8335ms p95=1.9093ms bytes=5289 rss=4.02MiB
+  poc: p50=1.8257ms p95=1.8737ms bytes=5289 rss=3.97MiB
+kodim08:pipeline:128:p2
+  stock: p50=2.9300ms p95=3.0487ms bytes=4802 rss=6.83MiB
+  reference: p50=2.9190ms p95=3.0719ms bytes=5282 rss=7.19MiB
+  poc: p50=2.9273ms p95=3.0457ms bytes=5282 rss=7.16MiB
+kodim08:pipeline:512:p1
+  stock: p50=3.4356ms p95=3.5539ms bytes=54668 rss=5.69MiB
+  reference: p50=3.5361ms p95=3.6603ms bytes=56165 rss=5.97MiB
+  poc: p50=3.5201ms p95=3.6361ms bytes=56165 rss=5.91MiB
+kodim08:pipeline:512:p2
+  stock: p50=5.4479ms p95=5.8082ms bytes=54585 rss=11.14MiB
+  reference: p50=5.5093ms p95=5.7179ms bytes=56062 rss=10.45MiB
+  poc: p50=5.5252ms p95=5.6873ms bytes=56062 rss=11.25MiB
+kodim13-128x85:encode
+  stock: p50=0.1572ms p95=0.1716ms bytes=3973 rss=2.61MiB
+  reference: p50=0.1668ms p95=0.1787ms bytes=4086 rss=2.66MiB
+  poc: p50=0.1627ms p95=0.1823ms bytes=4086 rss=2.66MiB
+kodim13-128x85:rows
+  stock: p50=0.1623ms p95=0.1812ms bytes=3973 rss=2.62MiB
+  reference: p50=0.1623ms p95=0.1792ms bytes=4086 rss=2.64MiB
+  poc: p50=0.1629ms p95=0.1787ms bytes=4086 rss=2.64MiB
+kodim13-512x341:encode
+  stock: p50=2.0145ms p95=2.1020ms bytes=56661 rss=4.70MiB
+  reference: p50=2.0377ms p95=2.1648ms bytes=55892 rss=4.77MiB
+  poc: p50=2.0472ms p95=2.1674ms bytes=55892 rss=4.80MiB
+kodim13-512x341:rows
+  stock: p50=2.0230ms p95=2.1263ms bytes=56661 rss=6.50MiB
+  reference: p50=2.0366ms p95=2.1514ms bytes=55892 rss=4.78MiB
+  poc: p50=2.0448ms p95=2.1828ms bytes=55892 rss=6.45MiB
+kodim13-768x512:encode
+  stock: p50=4.4568ms p95=4.7354ms bytes=123471 rss=13.95MiB
+  reference: p50=4.4908ms p95=4.6908ms bytes=120406 rss=14.02MiB
+  poc: p50=4.4725ms p95=4.6400ms bytes=120406 rss=11.25MiB
+kodim13-768x512:rows
+  stock: p50=4.4281ms p95=4.6297ms bytes=123471 rss=13.12MiB
+  reference: p50=4.4865ms p95=4.6936ms bytes=120406 rss=14.28MiB
+  poc: p50=4.4665ms p95=4.6405ms bytes=120406 rss=11.59MiB
+kodim13:pipeline:128:p1
+  stock: p50=1.9168ms p95=1.9683ms bytes=4114 rss=3.92MiB
+  reference: p50=1.9353ms p95=2.0186ms bytes=4211 rss=3.98MiB
+  poc: p50=1.9270ms p95=2.0054ms bytes=4211 rss=3.94MiB
+kodim13:pipeline:128:p2
+  stock: p50=2.9956ms p95=3.0819ms bytes=4102 rss=6.80MiB
+  reference: p50=3.0028ms p95=3.1175ms bytes=4217 rss=6.97MiB
+  poc: p50=3.0007ms p95=3.1197ms bytes=4217 rss=6.89MiB
+kodim13:pipeline:512:p1
+  stock: p50=3.5035ms p95=3.5816ms bytes=58232 rss=6.03MiB
+  reference: p50=3.4882ms p95=3.6117ms bytes=57439 rss=6.00MiB
+  poc: p50=3.5022ms p95=3.5933ms bytes=57439 rss=6.16MiB
+kodim13:pipeline:512:p2
+  stock: p50=5.6366ms p95=5.8339ms bytes=58139 rss=10.39MiB
+  reference: p50=5.6288ms p95=5.7747ms bytes=57377 rss=9.66MiB
+  poc: p50=5.6400ms p95=5.8507ms bytes=57377 rss=11.31MiB
+kodim23-128x85:encode
+  stock: p50=0.1522ms p95=0.1655ms bytes=3436 rss=2.62MiB
+  reference: p50=0.1603ms p95=0.1713ms bytes=4146 rss=2.61MiB
+  poc: p50=0.1557ms p95=0.1706ms bytes=4146 rss=2.61MiB
+kodim23-128x85:rows
+  stock: p50=0.1516ms p95=0.1627ms bytes=3436 rss=2.61MiB
+  reference: p50=0.1561ms p95=0.1653ms bytes=4146 rss=2.61MiB
+  poc: p50=0.1566ms p95=0.1740ms bytes=4146 rss=2.62MiB
+kodim23-512x341:encode
+  stock: p50=1.7022ms p95=1.7835ms bytes=24880 rss=4.45MiB
+  reference: p50=1.7589ms p95=1.8905ms bytes=28771 rss=4.53MiB
+  poc: p50=1.7494ms p95=1.8501ms bytes=28771 rss=4.45MiB
+kodim23-512x341:rows
+  stock: p50=1.7076ms p95=1.7714ms bytes=24880 rss=5.91MiB
+  reference: p50=1.7300ms p95=1.8753ms bytes=28771 rss=5.86MiB
+  poc: p50=1.7478ms p95=1.8410ms bytes=28771 rss=4.52MiB
+kodim23-768x512:encode
+  stock: p50=3.7466ms p95=3.9359ms bytes=45444 rss=9.55MiB
+  reference: p50=3.7643ms p95=3.9590ms bytes=51455 rss=9.28MiB
+  poc: p50=3.7960ms p95=3.9331ms bytes=51455 rss=6.64MiB
+kodim23-768x512:rows
+  stock: p50=3.6575ms p95=3.8384ms bytes=45444 rss=6.50MiB
+  reference: p50=3.7515ms p95=3.9348ms bytes=51455 rss=6.64MiB
+  poc: p50=3.7664ms p95=3.8992ms bytes=51455 rss=9.67MiB
+kodim23:pipeline:128:p1
+  stock: p50=1.3225ms p95=1.3732ms bytes=3479 rss=3.92MiB
+  reference: p50=1.3411ms p95=1.3977ms bytes=4239 rss=3.86MiB
+  poc: p50=1.3293ms p95=1.3830ms bytes=4239 rss=3.86MiB
+kodim23:pipeline:128:p2
+  stock: p50=2.4301ms p95=2.5529ms bytes=3477 rss=6.95MiB
+  reference: p50=2.4218ms p95=2.5483ms bytes=4238 rss=6.94MiB
+  poc: p50=2.4434ms p95=2.5177ms bytes=4238 rss=6.80MiB
+kodim23:pipeline:512:p1
+  stock: p50=3.1940ms p95=3.3009ms bytes=25183 rss=5.47MiB
+  reference: p50=3.2481ms p95=3.3554ms bytes=29162 rss=5.56MiB
+  poc: p50=3.2499ms p95=3.3684ms bytes=29162 rss=5.59MiB
+kodim23:pipeline:512:p2
+  stock: p50=4.7199ms p95=4.8447ms bytes=25181 rss=10.11MiB
+  reference: p50=4.7725ms p95=4.9601ms bytes=29172 rss=10.25MiB
+  poc: p50=4.7710ms p95=4.9897ms bytes=29172 rss=10.91MiB
+synthetic-3840x2160:encode
+  stock: p50=83.2328ms p95=85.8297ms bytes=894723 rss=90.45MiB
+  reference: p50=99.9674ms p95=100.7217ms bytes=2321473 rss=100.61MiB
+  poc: p50=99.5112ms p95=100.5277ms bytes=2321473 rss=100.88MiB
+synthetic-3840x2160:rows
+  stock: p50=82.6396ms p95=83.7956ms bytes=894723 rss=88.19MiB
+  reference: p50=100.1136ms p95=101.2595ms bytes=2321473 rss=100.97MiB
+  poc: p50=100.0327ms p95=103.2240ms bytes=2321473 rss=101.72MiB

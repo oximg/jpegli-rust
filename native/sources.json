@@ -1,0 +1,6 @@
+[
+  {"repo":"google/jpegli","rev":"031a0077f5799a6041004267fc12b956c1f52a20","path":".","sha256":"269b3a75d6b2da2351f7fb2d642043f60f9b6d1bd5839f20c0d7c569be073367"},
+  {"repo":"google/highway","rev":"271a9a0ed9de1232d9117f1572c3fe28f8542ec1","path":"third_party/highway","sha256":"c42bcfe44d100223ea0043acb3da6de703103ca44bfb1d46b577c90939177f5f"},
+  {"repo":"libjpeg-turbo/libjpeg-turbo","rev":"8ecba3647edb6dd940463fedf38ca33a8e2a73d1","path":"third_party/libjpeg-turbo","sha256":"ed729127097af5000bfeddc6b3e679c4363bb1618ebfc07efb6b47f576471b4b"},
+  {"repo":"google/skcms","rev":"96d9171c94b937a1b5f0293de7309ac16311b722","path":"third_party/skcms","sha256":"9bb4b5bba0b7c04f6c2bce9ff713d61e23c9a20c4945161ae16290498ad74627"}
+]
