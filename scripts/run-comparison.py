@@ -31,6 +31,7 @@ records = []
 destination = root / "docs/comparison-raw.json"
 metadata = {
     "platform": platform.platform(), "rounds": rounds,
+    "wrapper_version": "0.1.1", "sampling_before_quality": True,
     "oximg_revision": "73a68e0d77b210e5468d0b385c0bfc2937c8e706",
     "new_jpegli_revision": "031a0077f5799a6041004267fc12b956c1f52a20",
     "old_jpegli": "jpegli-sys 0.1.0+0.10.2",

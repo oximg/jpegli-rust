@@ -1,11 +1,16 @@
 # oximg comparison — 2026-09-30
 
-The current wrapper is worth pursuing for an independent API and a contained
-native error boundary, **not as a demonstrated speed upgrade for oximg**.
-On this machine, the same-core wrapper differences are approximately 1% or less
-in grouped latency, which is too small to claim a reliable win. The new native
-core is slower on the synthetic 4K case. Do not replace oximg's default backend
-on performance grounds from these results.
+Version **0.1.1**, with sampling configured before quality. This supersedes the
+0.1.0 measurements: that release built quantization tables using upstream's
+4:2:0 default before switching the output to 4:4:4. The resulting size and speed
+differences were not a fair native-core comparison.
+
+With the correction, all 62 cases produce byte-identical JPEGs across stock,
+reference and POC in all five rounds. The wrapper still does **not** demonstrate
+an oximg pipeline speedup. Whole-frame RGB encoding is effectively equal to
+stock; one-row calls are slower in this run, especially the synthetic 4K case.
+See [performance investigation](performance-investigation.md) for scan-policy
+experiments and measured optimization priorities.
 
 ## Results
 
@@ -15,16 +20,16 @@ These are descriptive measurements, not confidence intervals.
 
 | Workload | Cases | POC / stock time | POC / same-core time | POC / stock peak RSS | POC / same-core peak RSS |
 |---|---:|---:|---:|---:|---:|
-| 4K encode | 1 | 1.188x | 0.994x | 1.114x | 1.004x |
-| 4K rows | 1 | 1.213x | 1.003x | 1.160x | 1.011x |
-| RGB encode | 18 | 1.023x | 0.992x | 0.937x | 0.915x |
-| RGB rows | 18 | 1.028x | 1.003x | 0.972x | 0.941x |
-| pipeline 128 | 12 | 1.004x | 0.996x | 1.013x | 0.996x |
-| pipeline 512 | 12 | 1.011x | 1.002x | 1.004x | 1.011x |
+| 4K encode | 1 | 1.005x | 0.963x | 1.002x | 0.986x |
+| 4K rows | 1 | 1.067x | 1.075x | 1.010x | 1.010x |
+| RGB encode | 18 | 1.001x | 0.972x | 0.932x | 0.939x |
+| RGB rows | 18 | 1.031x | 1.018x | 0.976x | 0.962x |
+| pipeline 128 | 12 | 1.001x | 0.994x | 0.993x | 0.999x |
+| pipeline 512 | 12 | 1.006x | 1.003x | 0.978x | 0.986x |
 
-Same-core output was byte-identical for all 62 cases in all five rounds.
-Old-core and new-core JPEGs differ, so identical quality numbers do not establish
-matched perceptual quality. Lower RSS on small encoding cases is not evidence
+Output was byte-identical for all three variants in all 62 cases in all five
+rounds. This controls quality and file size for this corpus; it is not a promise
+of cross-version identity for every possible image. Lower RSS on small encoding cases is not evidence
 of lower allocator traffic or bounded codec memory. Whole-process peak RSS
 includes input and libraries; macOS accounting and small baselines make these
 ratios sensitive. Pipeline RSS is effectively unchanged at this granularity.
@@ -44,8 +49,8 @@ ratios sensitive. Pipeline RSS is effectively unchanged at this granularity.
   and identical compiler flags. Normal crate builds use ABI 62. The stock/core
   comparison also includes native build/dependency differences.
 - All cases use quality 80, explicit 4:4:4, and oximg's eight-scan progression.
-  The new core defaults to 4:2:0, so the reference explicitly forces 4:4:4 to
-  preserve the old core's setting.
+  The new core defaults to 4:2:0, so the reference explicitly forces 4:4:4
+  **before setting quality** to preserve both sampling and quantization.
 - Six [Kodak images](https://r0k.us/graphics/kodak/) (01, 03, 05, 08, 13, 23),
   RGB resized to longest edge 128, 512, 768, plus deterministic 3840×2160 noise
   and gradient. The pipeline uses JPEG inputs generated from the six PNGs,
@@ -78,8 +83,8 @@ target/release/oximg-ctl --env JPEGLI_BENCH_WRAPPER=poc \
 ```
 
 Observed JSON fields: `ok=true`, `status=200`, `content_type=image/jpeg`,
-`probe.width=100`, `probe.height=75`, `bytes=2411`,
-`sha256=1de5071fc245dd27a35e53d6fb130050cbeca46281b4f89ab74ed3a91965550e`.
+`probe.width=100`, `probe.height=75`, `bytes=2004`,
+`sha256=612a73e1b296cd7053ef4125ddcf8ab7e3f7bbb61be90253fabced3381937d3d`.
 This validates a real HTTP path, not HTTP throughput.
 
 ## Reproduction

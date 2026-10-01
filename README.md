@@ -8,7 +8,9 @@ The first milestone is a usable encoding boundary: checked borrowed RGB8 rows,
 explicit configuration, native failures returned as `Result`, and output
 ownership without a mandatory final copy. It makes no performance leadership
 claim. See the [controlled oximg benchmark](docs/comparison.md): the current
-wrapper does not demonstrate an end-to-end speed improvement.
+wrapper does not demonstrate an end-to-end speed improvement. The
+[performance investigation](docs/performance-investigation.md) identifies scan
+selection and native finish work as more promising targets.
 
 ## Build and run
 
